@@ -1,5 +1,5 @@
 <template>
-    <!-- Search and Filter not complete -->
+    <!-- Search, Filter, Edit not complete because related to new grouping function-->
     <AdminLayout> 
         <template #default>
             <section class="border rounded shadow-sm bg-white vh-100 w-100 p-4 d-flex flex-column">
