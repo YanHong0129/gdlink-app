@@ -1,5 +1,6 @@
 <template>
-    <AdminLayout>
+    <!-- Search and Filter not complete -->
+    <AdminLayout> 
         <template #default>
             <section class="border rounded shadow-sm bg-white vh-100 w-100 p-4 d-flex flex-column">
                 <div class="d-flex mb-4">
