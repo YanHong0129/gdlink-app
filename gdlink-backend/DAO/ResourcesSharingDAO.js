@@ -434,6 +434,32 @@ const ResourceSharingDAO = {
         } finally {
             conn.release();
         }
+    },
+
+    async getAllResources(req,res){
+        try{
+            const resource = await ResourcesSharingService.getAllResources();
+            return res.json(resource);
+        } catch (error) {
+            console.error('Controller Error:', error.message); 
+            res.status(500).json({
+              message: 'An error occurred while retrieving the resource',
+              error: error.message, 
+            });
+        }
+    },
+    async deleteResource(req, res) {
+        try {
+            const resourceId = req.params.resourceId;
+            const result = await ResourcesSharingService.deleteResource(resourceId);
+            return res.json(result);
+        } catch (error) {
+            console.error('Controller Error:', error.message);
+            res.status(500).json({
+                message: 'An error occurred while deleting the resource',
+                error: error.message,
+            });
+        }
     }
 } 
 
