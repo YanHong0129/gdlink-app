@@ -1,4 +1,31 @@
 <template>
+  <!-- Admin Layout -->
+  <div v-if="userRole === 'Admin'">
+    <AdminLayout>
+      <template #default>
+        <h2 class="ms-2 mb-4">Session {{ currentSession }} Semester {{ currentSemester }}</h2>
+        <div class="border rounded shadow-sm bg-white p-3">
+          <h4 class="align-middle">Welcome to Admin Page, 
+            <strong v-if="userSession">{{ userSession.name }}</strong>
+          !!!</h4>
+        </div>
+        <div class="d-flex justify-content-center gap-4">
+          <MyShareLinksChart :resources="myShareLinksResources" class="bg-white w-100" />
+          <SharedWithMeChart :resources="sharedWithMeResources" class="bg-white w-100" />
+        </div>
+        <div class="recent border rounded mt-4 shadow-sm bg-white p-4">
+          <h2 class="mb-4">Recent Access</h2>
+          <RecentAccessResources 
+            @viewDetails="viewDetails"
+            :resources="recentAccessResources"
+          />
+        </div>
+      </template>
+    </AdminLayout>
+  </div>
+  <!-- Admin Layout -->
+  <!-- Default Layout -->
+  <div v-else> 
   <DefaultLayout>
     <template #default>
       <h2 class="ms-2 mb-4">Session {{ currentSession }} Semester {{ currentSemester }}</h2>
@@ -20,11 +47,13 @@
       </div>
     </template>
   </DefaultLayout>
+    </div>
 </template>
   
   <script>
   import HomeService from '../service/HomeService';
   import DefaultLayout from '../components/DefaultLayout.vue'; 
+  import AdminLayout from '../components/AdminLayout.vue';
   import ResourcesChart from '../components/ResourcesChart.vue';
   import RecentAccessResources from '../components/ResourceList.vue'
   
@@ -33,6 +62,7 @@
       return {
         userId: null,
         userSession: null,
+        userRole: null, //Add Role
         recentAccessResources: [],
         myShareLinksResources: [],
         sharedWithMeResources: [],
@@ -42,6 +72,7 @@
     },
     components: {
       DefaultLayout,
+      AdminLayout, //Add Admin Layout Component
       ResourcesChart,
       RecentAccessResources
     },
@@ -50,6 +81,7 @@
         if (sessionData) {
             this.userSession = JSON.parse(sessionData);
             this.userId = this.userSession.user_id;
+            this.userRole = this.userSession.role; //Add User Role
         }
         this.displayChartData();
         this.displayRecentAccess();
