@@ -192,37 +192,16 @@ const ResourcesSharingController = {
             });
         }
     },
-    async getAllResources() {
-        const conn = await getConnection();
-        try {
-            let query;
-                query = `SELECT
-                            resources.resource_id,
-                            resources.link, 
-                            resources.description,
-                            resources.ref_name,
-                            resources.sessem,
-                            resources.owner,  
-                            DATE_FORMAT(resources.shared_at, '%d/%m/%Y %r') AS shared_at,
-                            category.category_name,
-                            category.color
-                        FROM 
-                            resources
-                        INNER JOIN 
-                            users ON resources.sharer_id = users.user_id
-                        INNER JOIN
-                            category ON category.category_id = resources.category_id`;
-            
-            const rows = await conn.query(query);
-            return rows;
+    async getAllResources(req,res){
+        try{
+            const resource = await ResourcesSharingService.getAllResources();
+            return res.json(resource);
         } catch (error) {
-            console.error('Error occurred while retrieving resources:', error);
-            return {
-                error: true,
-                message: 'An error occurred while retrieving the resources. Please try again later.',
-            };
-        } finally {
-            conn.release();
+            console.error('Controller Error:', error.message); 
+            res.status(500).json({
+              message: 'An error occurred while retrieving the resource',
+              error: error.message, 
+            });
         }
     }
 }
